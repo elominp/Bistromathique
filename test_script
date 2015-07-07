@@ -1,0 +1,207 @@
+#!/bin/bash
+echo "
+Tests of the different operations:
+The written expression will be tested by both bc and our algorithm.
+If there is any difference between the two (if we are wrong),
+a summary of the difference between the answers will be displayed,
+starting with \"1c1\",
+the first displayed value being ours, and the second being BC's.
+If we are right, nothing will be displayed and the script will
+move on to the next test.
+
+Due to BC restrictions, the tests here will only be made in
+the decimal base.
+
+For the division and modulo by zero, the test will only show
+the result of our algorithm, as we don't send the same error message as BC.
+
+------------------------------------
+Addition:
+------------------------------------"
+echo "0 + 0"
+./testadd 0 0 > res_calc
+echo "0 + 0" | bc > res_bc
+diff res_calc res_bc
+
+echo "99999999999999999999 + 1"
+./testadd 99999999999999999999 1 > res_calc
+echo "99999999999999999999 + 1" | bc > res_bc
+diff res_calc res_bc
+
+echo "1 + 99999999999999999999 "
+./testadd 1 99999999999999999999 > res_calc
+echo "1 + 99999999999999999999" | bc > res_bc
+diff res_calc res_bc
+
+echo "99999999999999999999 + 99999999999999999999 "
+./testadd 99999999999999999999 99999999999999999999 > res_calc
+echo "99999999999999999999 + 99999999999999999999" | bc > res_bc
+diff res_calc res_bc
+
+echo "56598765432456789765434567897654324567897654356789876543567898765 + 56598765432456789765434567897654324567897654356789876543567898765"
+./testadd 56598765432456789765434567897654324567897654356789876543567898765 56598765432456789765434567897654324567897654356789876543567898765 > res_calc
+echo "56598765432456789765434567897654324567897654356789876543567898765 + 56598765432456789765434567897654324567897654356789876543567898765" | bc > res_bc
+diff res_calc res_bc
+
+echo "0000000000000000000001 + 999999999999999"
+./testadd 0000000000000000000001 999999999999999 > res_calc
+echo "0000000000000000000001 + 999999999999999" | bc > res_bc
+diff res_calc res_bc
+
+echo "999999999999999 + 0000000000000000000001"
+./testadd 999999999999999 0000000000000000000001> res_calc
+echo "999999999999999 + 0000000000000000000001" | bc > res_bc
+diff res_calc res_bc
+
+echo "-000999999999999999 + -0000000000000000000001"
+./testadd -000999999999999999 -0000000000000000000001> res_calc
+echo "-000999999999999999 + -0000000000000000000001" | bc > res_bc
+diff res_calc res_bc
+
+echo "------------------------------------
+Substraction:
+------------------------------------"
+
+echo "0 - 0"
+./testsub 0 0 > res_calc
+echo "0 - 0" | bc > res_bc
+diff res_calc res_bc
+
+echo "1 - 1"
+./testsub 1 1 > res_calc
+echo "1 - 1" | bc > res_bc
+diff res_calc res_bc
+
+echo "99999999999999999999 - 1"
+./testsub 99999999999999999999 1 > res_calc
+echo "99999999999999999999 - 1" | bc > res_bc
+diff res_calc res_bc
+
+echo "1 - 99999999999999999999 "
+./testsub 1 99999999999999999999 > res_calc
+echo "1 - 99999999999999999999" | bc > res_bc
+diff res_calc res_bc
+
+echo "56598765432456789765434567897654324567897654356789876543567898765 - 56598765432456789765434567897654324567897654356789876543567898765"
+./testsub 56598765432456789765434567897654324567897654356789876543567898765 56598765432456789765434567897654324567897654356789876543567898765 > res_calc
+echo "56598765432456789765434567897654324567897654356789876543567898765 - 56598765432456789765434567897654324567897654356789876543567898765" | bc > res_bc
+diff res_calc res_bc
+
+echo "999999999999999 - 0000000000000000000001"
+./testsub 999999999999999 0000000000000000000001> res_calc
+echo "999999999999999 - 0000000000000000000001" | bc > res_bc
+diff res_calc res_bc
+
+echo "0000000000000000000001 - 999999999999999"
+./testsub 0000000000000000000001 999999999999999 > res_calc
+echo "0000000000000000000001 - 999999999999999" | bc > res_bc
+diff res_calc res_bc
+
+echo "-0000000000000000000001 - -000999999999999999"
+./testsub -0000000000000000000001 -000999999999999999 > res_calc
+echo "-0000000000000000000001 - -000999999999999999" | bc > res_bc
+diff res_calc res_bc
+
+echo "------------------------------------
+Multiplication:
+------------------------------------"
+
+echo "1 * 0"
+./testmul 1 0 > res_calc
+echo "1 * 0" | bc > res_bc
+diff res_calc res_bc
+
+echo "0 * 1"
+./testmul 0 1 > res_calc
+echo "0 * 1" | bc > res_bc
+diff res_calc res_bc
+
+echo "9999999999999999 * 700000"
+./testmul 9999999999999999 700000 > res_calc
+echo "9999999999999999 * 700000" | bc > res_bc
+diff res_calc res_bc
+
+echo "0000000500000000000 * 60000"
+./testmul 0000000500000000000 60000 > res_calc
+echo "0000000500000000000 * 60000" | bc > res_bc
+diff res_calc res_bc
+
+echo "-0000000500000000000 * -00060000"
+./testmul -0000000500000000000 -00060000 > res_calc
+echo "-0000000500000000000 * -00060000" | bc > res_bc
+diff res_calc res_bc
+
+echo "------------------------------------
+Division:
+------------------------------------"
+
+echo "1 / 0"
+./testdiv 1 0 > res_calc
+cat res_calc
+
+echo "0 / 1"
+./testdiv 0 1 > res_calc
+echo "0 / 1" | bc > res_bc
+diff res_calc res_bc
+
+echo "9999999999999999 / 7000000000"
+./testdiv 9999999999999999 7000000000 > res_calc
+echo "9999999999999999 / 7000000000" | bc > res_bc
+diff res_calc res_bc
+
+echo "9999999999999999 / 0000700000000"
+./testdiv 9999999999999999 0000700000000 > res_calc
+echo "9999999999999999 / 0000700000000" | bc > res_bc
+diff res_calc res_bc
+
+echo "00009999999999999999 / 7000000000"
+./testdiv 00009999999999999999 7000000000 > res_calc
+echo "00009999999999999999 / 7000000000" | bc > res_bc
+diff res_calc res_bc
+
+echo "-00009999999999999999 / 7000000000"
+./testdiv -00009999999999999999 7000000000 > res_calc
+echo "-00009999999999999999 / 7000000000" | bc > res_bc
+diff res_calc res_bc
+
+echo "------------------------------------
+Modulo:
+------------------------------------"
+
+echo "1 % 0"
+./testmod 1 0 > res_calc
+cat res_calc
+
+echo "0 % 1"
+./testmod 0 1 > res_calc
+echo "0 % 1" | bc > res_bc
+diff res_calc res_bc
+
+echo "45665654 % 5656"
+./testmod 45665654 5656 > res_calc
+echo "45665654 % 5656" | bc > res_bc
+diff res_calc res_bc
+
+echo "5656 % 45665654"
+./testmod 5656 45665654 > res_calc
+echo "5656 % 45665654" | bc > res_bc
+diff res_calc res_bc
+
+echo "0000005656 % 45665654"
+./testmod 0000005656 45665654 > res_calc
+echo "0000005656 % 45665654" | bc > res_bc
+diff res_calc res_bc
+
+echo "5656 % 00045665654"
+./testmod 5656 00045665654 > res_calc
+echo "5656 % 00045665654" | bc > res_bc
+diff res_calc res_bc
+
+echo "-5656565656565 % 45665654"
+./testmod -5656565656565 45665654 > res_calc
+echo "-5656565656565 % 45665654" | bc > res_bc
+diff res_calc res_bc
+
+echo "
+------------------------------------
+End of tests"
